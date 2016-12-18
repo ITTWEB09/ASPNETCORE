@@ -73,7 +73,7 @@
                 @Html.DisplayFor(modelItem => item.WikiLink)
             </td>
             <td>
-                <!--@Html.ActionLink("Components", "Index", "Component", new { id = item.ComponentTypeId }) |-->
+                @Html.ActionLink("Components", "Index", "Components", new { id = item.ComponentTypeId }) |
                 <a asp-action="Edit" asp-route-id="@item.ComponentTypeId">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.ComponentTypeId">Delete</a>
             </td>
