@@ -23,6 +23,7 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.CategoryComponentTypes.First().ComponentType.AdminComment)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
