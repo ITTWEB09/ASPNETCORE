@@ -20,9 +20,9 @@ namespace ASPNETCORE.Controllers
         }
 
         // GET: Components
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.Components.ToListAsync());
+            return View(await _context.Components.Where(x => x.ComponentTypeId == id).ToListAsync());
         }
 
         // GET: Components/Details/5

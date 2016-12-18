@@ -22,9 +22,7 @@ namespace ASPNETCORE.Controllers
         // GET: ComponentTypes
         public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.ComponentTypes
-                .Where(x => x.ComponentTypeId == id)
-                .ToListAsync());
+            return View(await (from cType in _context.ComponentTypes from x in cType.CategoryComponentTypes where x.CategoryId == id select cType).ToListAsync());
         }
 
         // GET: ComponentTypes/Details/5
