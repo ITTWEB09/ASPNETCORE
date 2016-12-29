@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using ASPNETCORE.Models;
 using ASPNETCORE.Models.AccountViewModels;
 using ASPNETCORE.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ASPNETCORE.Controllers
 {
@@ -19,6 +18,7 @@ namespace ASPNETCORE.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
@@ -26,12 +26,14 @@ namespace ASPNETCORE.Controllers
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
@@ -45,6 +47,31 @@ namespace ASPNETCORE.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
+        }
+
+        [AllowAnonymous]
+        public void CreateRoles()
+        {
+            bool roleExists = _roleManager.RoleExistsAsync("Administrator").Result;
+            if (!roleExists)
+            {
+                var newRole = new IdentityRole("Administrator");
+                IdentityResult result = _roleManager.CreateAsync(newRole).Result;
+            }
+
+            roleExists = _roleManager.RoleExistsAsync("User").Result;
+            if (!roleExists)
+            {
+                var newRole = new IdentityRole("User");
+                IdentityResult result = _roleManager.CreateAsync(newRole).Result;
+            }
+        }
+
+        [AllowAnonymous]
+        public void AssignRoles()
+        {
+            IdentityResult result = _userManager.AddToRoleAsync(_userManager.Users.First(x => x.UserName.Contains("admin")), "Administrator").Result;
+            result = _userManager.AddToRoleAsync(_userManager.Users.First(x => x.UserName.Contains("user")), "User").Result;
         }
 
         //

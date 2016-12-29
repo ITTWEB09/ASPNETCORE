@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASPNETCORE.Data;
 using ASPNETCORE.Models.CategoryComponents;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNETCORE.Controllers
 {
@@ -43,6 +42,7 @@ namespace ASPNETCORE.Controllers
         }
 
         // GET: Components/Create
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create()
         {
             ViewBag.ComponentTypes = new SelectList(await _context.ComponentTypes.ToListAsync(), "ComponentTypeId", "ComponentName");
@@ -54,6 +54,7 @@ namespace ASPNETCORE.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("ComponentId,AdminComment,ComponentNumber,ComponentTypeId,CurrentLoanInformationId,SerialNo,Status,UserComment")] Component component, int selectedComponentType)
         {
             if (ModelState.IsValid)
@@ -66,6 +67,7 @@ namespace ASPNETCORE.Controllers
         }
 
         // GET: Components/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -86,6 +88,7 @@ namespace ASPNETCORE.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(long id, [Bind("ComponentId,AdminComment,ComponentNumber,ComponentTypeId,CurrentLoanInformationId,SerialNo,Status,UserComment")] Component component)
         {
             if (id != component.ComponentId)
@@ -117,6 +120,7 @@ namespace ASPNETCORE.Controllers
         }
 
         // GET: Components/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -136,6 +140,7 @@ namespace ASPNETCORE.Controllers
         // POST: Components/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var component = await _context.Components.SingleOrDefaultAsync(m => m.ComponentId == id);

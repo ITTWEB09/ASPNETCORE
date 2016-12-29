@@ -6,7 +6,6 @@ using ASPNETCORE.Data;
 using ASPNETCORE.Models.CategoryComponents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 
 namespace ASPNETCORE.Controllers
 {
